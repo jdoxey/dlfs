@@ -1,0 +1,50 @@
+FROM debian:11.1
+
+# Update and install build tools
+RUN apt-get -y update
+RUN apt-get -y install build-essential bison python3 texinfo wget gawk
+
+# Change /bin/sh from dash to bash
+RUN rm /bin/sh; ln -s /bin/bash /bin/sh
+
+# *** 2.2. Host System Requirements ***
+COPY scripts/version-check.sh /root/
+RUN /root/version-check.sh
+
+# *** 2.6. Setting The $LFS Variable ***
+# ENV is required because RUN uses `sh` which doesn't read startup files
+# (.bashrc, .profile, etc).
+ENV LFS=/mnt/lfs
+
+# *** 2.7. Mounting the New Partition ***
+# We just create the directory
+RUN LFS=/mnt/lfs mkdir -pv $LFS
+
+# *** 3. Packages and Patches ***
+RUN mkdir -v $LFS/sources
+RUN chmod -v a+wt $LFS/sources
+COPY scripts/wget-list $LFS/sources/wget-list
+RUN wget --input-file=$LFS/sources/wget-list --continue --directory-prefix=$LFS/sources
+RUN cd $LFS/sources; md5sum -c md5sums
+
+# *** 4.2. Creating a limited directory layout in LFS filesystem ***
+RUN mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
+RUN for i in bin lib sbin; do ln -sv usr/$i $LFS/$i; done
+RUN mkdir -pv $LFS/lib64
+RUN mkdir -pv $LFS/tools
+
+# *** 4.3. Adding the LFS User ***
+RUN groupadd lfs
+RUN useradd -s /bin/bash -g lfs -m -k /dev/null lfs
+RUN chown -v lfs $LFS/{usr{,/*},lib,var,etc,bin,sbin,tools}
+RUN chown -v lfs $LFS/lib64
+RUN chown -v lfs $LFS/sources
+USER lfs
+
+# *** 4.4. Setting Up the Environment ***
+COPY scripts/lfs.bash{_profile,rc} /home/lfs/
+
+# *** 5. Compiling a Cross-Toolchain
+#     6. Cross Compiling Temporary Tools ***
+COPY scripts/chapters-5-and-6.sh /home/lfs/chapters-5-and-6.sh
+RUN /home/lfs/chapters-5-and-6.sh
