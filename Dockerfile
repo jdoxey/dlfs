@@ -53,3 +53,10 @@ COPY scripts/lfs.bashrc        /home/lfs/.bashrc
 # *** 6. Cross Compiling Temporary Tools ***
 COPY scripts/chapters-5-and-6.sh /home/lfs/chapters-5-and-6.sh
 RUN /bin/bash -l /home/lfs/chapters-5-and-6.sh
+
+# *** 7.2. Changing Ownership ***
+USER root
+RUN chown -R root:root $LFS/{usr,lib,var,etc,bin,sbin,tools,lib64}
+
+# Copy scripts used for in chapter 7
+COPY scripts/chapter-*.sh $LFS/root/

@@ -12,9 +12,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+
+  up-to-chapter-6:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout project
+        uses: actions/checkout@v2
       - name: Run up to chapter 6
         run: ./build-1-host.sh
+      - name: Upload Docker image as build artifact
+        uses: ishworkh/docker-image-artifact-upload@v1
+        with:
+          image: "dlfs-1-host:latest"
+
+  chapter-7:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Download Docker image build artifact
+        uses: ishworkh/docker-image-artifact-download@v1
+        with:
+          image: "dlfs-1-host:latest"
+      - name: Run chapter 7
+        run: ./build-2-chroot.sh

@@ -5,9 +5,6 @@ log() {
 	echo "*** $1 ***"
 }
 
-echo "*** LFS=$LFS"
-echo "*** LFS_TGT=$LFS_TGT"
-
 log "5.2. Binutils-2.37 - Pass 1"
 
 cd $LFS/sources
