@@ -45,7 +45,8 @@ RUN chown -v lfs $LFS/sources
 USER lfs
 
 # *** 4.4. Setting Up the Environment ***
-COPY scripts/lfs.bash{_profile,rc} /home/lfs/
+COPY scripts/lfs.bash_profile  /home/lfs/.bash_profile
+COPY scripts/lfs.bashrc        /home/lfs/.bashrc
 
 # *** 5. Compiling a Cross-Toolchain
 #     6. Cross Compiling Temporary Tools ***
