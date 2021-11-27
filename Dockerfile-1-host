@@ -52,4 +52,4 @@ COPY scripts/lfs.bashrc        /home/lfs/.bashrc
 # and
 # *** 6. Cross Compiling Temporary Tools ***
 COPY scripts/chapters-5-and-6.sh /home/lfs/chapters-5-and-6.sh
-RUN /bin/bash /home/lfs/chapters-5-and-6.sh
+RUN /bin/bash -l /home/lfs/chapters-5-and-6.sh
