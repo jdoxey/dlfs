@@ -15,8 +15,6 @@ jobs:
 
   up-to-chapter-6:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
@@ -29,8 +27,7 @@ jobs:
 
   chapter-7:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
+    needs: up-to-chapter-6
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
