@@ -48,7 +48,8 @@ USER lfs
 COPY scripts/lfs.bash_profile  /home/lfs/.bash_profile
 COPY scripts/lfs.bashrc        /home/lfs/.bashrc
 
-# *** 5. Compiling a Cross-Toolchain
-#     6. Cross Compiling Temporary Tools ***
+# *** 5. Compiling a Cross-Toolchain ***
+# and
+# *** 6. Cross Compiling Temporary Tools ***
 COPY scripts/chapters-5-and-6.sh /home/lfs/chapters-5-and-6.sh
-RUN /home/lfs/chapters-5-and-6.sh
+RUN /bin/bash /home/lfs/chapters-5-and-6.sh
