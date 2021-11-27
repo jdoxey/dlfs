@@ -25,6 +25,7 @@ RUN mkdir -v $LFS/sources
 RUN chmod -v a+wt $LFS/sources
 COPY scripts/wget-list $LFS/sources/wget-list
 RUN wget --input-file=$LFS/sources/wget-list --no-verbose --directory-prefix=$LFS/sources
+COPY scripts/md5sums $LFS/sources/
 RUN cd $LFS/sources; md5sum -c md5sums
 
 # *** 4.2. Creating a limited directory layout in LFS filesystem ***
