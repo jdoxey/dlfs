@@ -1,3 +1,0 @@
-FROM debian
-
-RUN touch /root/john-changed-this-container
