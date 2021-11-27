@@ -25,8 +25,8 @@ RUN mkdir -v $LFS/sources
 RUN chmod -v a+wt $LFS/sources
 COPY scripts/wget-list $LFS/sources/wget-list
 RUN wget --input-file=$LFS/sources/wget-list --no-verbose --directory-prefix=$LFS/sources
-RUN wget https://github.com/systemd/systemd/archive/refs/tags/v249.tar.gz --output-document=$LFS/sources/ninja-1.10.2.tar.gz
-RUN wget https://github.com/ninja-build/ninja/archive/refs/tags/v1.10.2.tar.gz --output-document=$LFS/sources/systemd-249.tar.gz
+RUN wget https://github.com/systemd/systemd/archive/refs/tags/v249.tar.gz --output-document=$LFS/sources/systemd-249.tar.gz
+RUN wget https://github.com/ninja-build/ninja/archive/refs/tags/v1.10.2.tar.gz --output-document=$LFS/sources/ninja-1.10.2.tar.gz
 COPY scripts/md5sums $LFS/sources/
 RUN cd $LFS/sources; md5sum -c md5sums
 
