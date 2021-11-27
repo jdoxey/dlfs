@@ -723,10 +723,240 @@ done
 
 ln -sv ../vim/vim82/doc /usr/share/doc/vim-8.2.3337
 
+cat > /etc/vimrc << "EOF"
+" Begin /etc/vimrc
 
-log "XXXXXX NOT FINISHED XXXXXXXX"
+" Ensure defaults are set before customizing settings, not after
+source $VIMRUNTIME/defaults.vim
+let skip_defaults_vim=1 
 
+set nocompatible
+set backspace=2
+set mouse=
+syntax on
+if (&term == "xterm") || (&term == "putty")
+  set background=dark
+endif
+
+" End /etc/vimrc
+EOF
 
 cd ..
 rm -rf vim-8.2.3337
 
+
+log "8.69. MarkupSafe-2.0.1"
+
+tar -xf MarkupSafe-2.0.1.tar.gz
+cd MarkupSafe-2.0.1
+
+python3 setup.py build
+
+python3 setup.py install --optimize=1
+
+cd ..
+rm -rf MarkupSafe-2.0.1
+
+
+log "8.70. Jinja2-3.0.1"
+
+tar -xf Jinja2-3.0.1.tar.gz
+cd Jinja2-3.0.1
+
+python3 setup.py install --optimize=1
+
+cd ..
+rm -rf Jinja2-3.0.1
+
+
+log "8.71. Systemd-249"
+
+tar -xf systemd-249.tar.gz
+cd systemd-249
+
+patch -Np1 -i ../systemd-249-upstream_fixes-1.patch
+
+sed -i -e 's/GROUP="render"/GROUP="video"/' \
+        -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
+
+mkdir -p build
+cd       build
+
+LANG=en_US.UTF-8                    \
+meson --prefix=/usr                 \
+      --sysconfdir=/etc             \
+      --localstatedir=/var          \
+      --buildtype=release           \
+      -Dblkid=true                  \
+      -Ddefault-dnssec=no           \
+      -Dfirstboot=false             \
+      -Dinstall-tests=false         \
+      -Dldconfig=false              \
+      -Dsysusers=false              \
+      -Db_lto=false                 \
+      -Drpmmacrosdir=no             \
+      -Dhomed=false                 \
+      -Duserdb=false                \
+      -Dman=false                   \
+      -Dmode=release                \
+      -Ddocdir=/usr/share/doc/systemd-249 \
+      ..
+
+LANG=en_US.UTF-8 ninja
+
+LANG=en_US.UTF-8 ninja install
+
+tar -xf ../../systemd-man-pages-249.tar.xz --strip-components=1 -C /usr/share/man
+
+rm -rf /usr/lib/pam.d
+
+systemd-machine-id-setup
+
+systemctl preset-all
+
+systemctl disable systemd-time-wait-sync.service
+
+cd ..
+
+cd ..
+rm -rf systemd-249
+
+
+log "8.72. D-Bus-1.12.20"
+
+tar -xf dbus-1.12.20.tar.gz
+cd dbus-1.12.20
+
+./configure --prefix=/usr                        \
+            --sysconfdir=/etc                    \
+            --localstatedir=/var                 \
+            --disable-static                     \
+            --disable-doxygen-docs               \
+            --disable-xml-docs                   \
+            --docdir=/usr/share/doc/dbus-1.12.20 \
+            --with-console-auth-dir=/run/console \
+            --with-system-pid-file=/run/dbus/pid \
+            --with-system-socket=/run/dbus/system_bus_socket
+
+make
+
+make install
+
+ln -sfv /etc/machine-id /var/lib/dbus
+
+cd ..
+rm -rf dbus-1.12.20
+
+
+log "8.73. Man-DB-2.9.4"
+
+tar -xf man-db-2.9.4.tar.xz
+cd man-db-2.9.4
+
+./configure --prefix=/usr                        \
+            --docdir=/usr/share/doc/man-db-2.9.4 \
+            --sysconfdir=/etc                    \
+            --disable-setuid                     \
+            --enable-cache-owner=bin             \
+            --with-browser=/usr/bin/lynx         \
+            --with-vgrind=/usr/bin/vgrind        \
+            --with-grap=/usr/bin/grap
+
+make
+
+make check
+
+make install
+
+cd ..
+rm -rf man-db-2.9.4
+
+
+log "8.74. Procps-ng-3.3.17"
+
+tar -xf procps-ng-3.3.17.tar.xz
+cd procps-3.3.17
+
+./configure --prefix=/usr                            \
+            --docdir=/usr/share/doc/procps-ng-3.3.17 \
+            --disable-static                         \
+            --disable-kill                           \
+            --with-systemd
+
+make
+
+make check
+
+make install
+
+cd ..
+rm -rf procps-3.3.17
+
+
+log "8.75. Util-linux-2.37.2"
+
+tar -xf util-linux-2.37.2.tar.xz
+cd util-linux-2.37.2
+
+./configure ADJTIME_PATH=/var/lib/hwclock/adjtime   \
+            --libdir=/usr/lib    \
+            --docdir=/usr/share/doc/util-linux-2.37.2 \
+            --disable-chfn-chsh  \
+            --disable-login      \
+            --disable-nologin    \
+            --disable-su         \
+            --disable-setpriv    \
+            --disable-runuser    \
+            --disable-pylibmount \
+            --disable-static     \
+            --without-python     \
+            runstatedir=/run
+
+make
+
+rm tests/ts/lsns/ioctl_ns
+
+chown -Rv tester .
+su tester -c "make -k check"
+
+make install
+
+cd ..
+rm -rf util-linux-2.37.2
+
+
+log "8.76. E2fsprogs-1.46.4"
+
+tar -xf e2fsprogs-1.46.4.tar.gz
+cd e2fsprogs-1.46.4
+
+./configure --prefix=/usr
+
+make
+
+make check
+
+make install
+
+rm -fv /usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
+
+gunzip -v /usr/share/info/libext2fs.info.gz
+install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info
+
+makeinfo -o      doc/com_err.info ../lib/et/com_err.texinfo
+install -v -m644 doc/com_err.info /usr/share/info
+install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info
+
+cd ..
+rm -rf e2fsprogs-1.46.4
+
+
+log "8.79. Cleaning Up"
+
+rm -rf /tmp/*
+
+find /usr/lib /usr/libexec -name \*.la -delete
+
+find /usr -depth -name $(uname -m)-lfs-linux-gnu\* | xargs rm -rf
+
+userdel -r tester
