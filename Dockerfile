@@ -51,8 +51,8 @@ COPY scripts/lfs.bashrc        /home/lfs/.bashrc
 # *** 5. Compiling a Cross-Toolchain ***
 # and
 # *** 6. Cross Compiling Temporary Tools ***
-COPY scripts/chapters-5-and-6.sh /home/lfs/chapters-5-and-6.sh
-RUN /bin/bash -l /home/lfs/chapters-5-and-6.sh
+COPY scripts/chapter-5-and-6.sh /home/lfs/chapter-5-and-6.sh
+RUN /bin/bash -l /home/lfs/chapter-5-and-6.sh
 
 # *** 7.2. Changing Ownership ***
 USER root
