@@ -38,10 +38,13 @@ make
 
 ulimit -s 32768
 
-chown -Rv tester . 
-su tester -c "PATH=$PATH make -k check"
+# Tests don't finish in GitHub Actions time limit.
+# TODO: Find a way to split the tests across jobs
 
-../contrib/test_summary | grep -A7 Summ
+# chown -Rv tester . 
+# su tester -c "PATH=$PATH make -k check"
+
+# ../contrib/test_summary | grep -A7 Summ
 
 make install
 rm -rf /usr/lib/gcc/$(gcc -dumpmachine)/11.2.0/include-fixed/bits/
