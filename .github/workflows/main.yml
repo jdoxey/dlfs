@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
+      - name: Remove Android and .NET to increase space on VM
+        run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet
       - name: Run up to chapter 6
         run: ./build-1-host.sh
       - name: Upload Docker image as build artifact
@@ -31,6 +33,8 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
+      - name: Remove Android and .NET to increase space on VM
+        run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet
       - name: Download Docker image build artifact
         uses: ishworkh/docker-image-artifact-download@v1
         with:
@@ -48,6 +52,8 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
+      - name: Remove Android and .NET to increase space on VM
+        run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet
       - name: Download Docker image build artifact
         uses: ishworkh/docker-image-artifact-download@v1
         with:
