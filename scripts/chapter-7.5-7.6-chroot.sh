@@ -97,4 +97,4 @@ echo "tester:x:101:101::/home/tester:/bin/bash" >> /etc/passwd
 echo "tester:x:101:" >> /etc/group
 install -o tester -d /home/tester
 
-exec /bin/bash --login +h /root/chapter-7.7-8.25-chroot.sh
+exec /bin/bash --login +h /root/chapter-7.7-8.26-chroot.sh

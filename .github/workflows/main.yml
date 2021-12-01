@@ -13,23 +13,23 @@ on:
 
 jobs:
 
-  up-to-chapter-6:
+  up-to-gcc-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
       - name: Remove Android and .NET to increase space on VM
         run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet
-      - name: Run up to chapter 6
+      - name: Run up to GCC tests
         run: ./build-1-host.sh
       - name: Upload Docker image as build artifact
         uses: ishworkh/docker-image-artifact-upload@v1
         with:
           image: "dlfs-1-host:latest"
 
-  chapter-7:
+  gcc-tests:
     runs-on: ubuntu-latest
-    needs: up-to-chapter-6
+    needs: up-to-gcc-tests
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
@@ -39,16 +39,16 @@ jobs:
         uses: ishworkh/docker-image-artifact-download@v1
         with:
           image: "dlfs-1-host:latest"
-      - name: Run chapter 7
+      - name: Run GCC tests
         run: ./build-2-chroot.sh
       - name: Upload Docker image as build artifact
         uses: ishworkh/docker-image-artifact-upload@v1
         with:
           image: "dlfs-1-host:latest"
 
-  chapter-8-bash-on:
+  after-gcc-tests:
     runs-on: ubuntu-latest
-    needs: chapter-7
+    needs: gcc-tests
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
@@ -58,7 +58,7 @@ jobs:
         uses: ishworkh/docker-image-artifact-download@v1
         with:
           image: "dlfs-1-host:latest"
-      - name: Run chapter 8 bash on
+      - name: Run steps after GCC tests
         run: ./build-3-chroot.sh
       - name: Upload Docker image as build artifact
         uses: ishworkh/docker-image-artifact-upload@v1

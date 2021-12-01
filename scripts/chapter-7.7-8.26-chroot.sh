@@ -5,6 +5,7 @@ log() {
 	echo "*** $1 ***"
 }
 
+
 # last few commands from chapter 7.6
 touch /var/log/{btmp,lastlog,faillog,wtmp}
 chgrp -v utmp /var/log/lastlog
@@ -835,3 +836,35 @@ sed -i 's/yes/no/' /etc/default/useradd
 
 cd ..
 rm -rf shadow-4.9
+
+
+log "8.26. GCC-11.2.0 (build)"
+
+cd /sources
+tar -xf gcc-11.2.0.tar.xz
+cd gcc-11.2.0
+
+sed -e '/static.*SIGSTKSZ/d' \
+    -e 's/return kAltStackSize/return SIGSTKSZ * 4/' \
+    -i libsanitizer/sanitizer_common/sanitizer_posix_libcdep.cpp
+
+case $(uname -m) in
+  x86_64)
+    sed -e '/m64=/s/lib64/lib/' \
+        -i.orig gcc/config/i386/t-linux64
+  ;;
+esac
+
+mkdir -v build
+cd       build
+
+../configure --prefix=/usr            \
+             LD=ld                    \
+             --enable-languages=c,c++ \
+             --disable-multilib       \
+             --disable-bootstrap      \
+             --with-system-zlib
+
+make
+
+# gcc tests are executed in next script

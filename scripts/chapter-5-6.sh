@@ -5,6 +5,7 @@ log() {
 	echo "*** $1 ***"
 }
 
+
 log "5.2. Binutils-2.37 - Pass 1"
 
 cd $LFS/sources

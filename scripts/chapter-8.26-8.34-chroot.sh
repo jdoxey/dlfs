@@ -6,45 +6,9 @@ log() {
 }
 
 
-log "8.26. GCC-11.2.0"
+log "8.26. GCC-11.2.0 (install)"
 
-cd /sources
-tar -xf gcc-11.2.0.tar.xz
-cd gcc-11.2.0
-
-sed -e '/static.*SIGSTKSZ/d' \
-    -e 's/return kAltStackSize/return SIGSTKSZ * 4/' \
-    -i libsanitizer/sanitizer_common/sanitizer_posix_libcdep.cpp
-
-case $(uname -m) in
-  x86_64)
-    sed -e '/m64=/s/lib64/lib/' \
-        -i.orig gcc/config/i386/t-linux64
-  ;;
-esac
-
-mkdir -v build
-cd       build
-
-
-../configure --prefix=/usr            \
-             LD=ld                    \
-             --enable-languages=c,c++ \
-             --disable-multilib       \
-             --disable-bootstrap      \
-             --with-system-zlib
-
-make
-
-ulimit -s 32768
-
-# Tests don't finish in GitHub Actions time limit.
-# TODO: Find a way to split the tests across jobs
-
-# chown -Rv tester . 
-# su tester -c "PATH=$PATH make -k check"
-
-# ../contrib/test_summary | grep -A7 Summ
+cd /sources/gcc-11.2.0/build
 
 make install
 rm -rf /usr/lib/gcc/$(gcc -dumpmachine)/11.2.0/include-fixed/bits/
