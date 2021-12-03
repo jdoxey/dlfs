@@ -60,6 +60,8 @@ jobs:
           image: "dlfs-1-host:latest"
       - name: Run steps after GCC tests
         run: ./build-3-chroot.sh
+      - name: Clean up /tmp before upload
+        run: rm -rf /tmp/* /tmp/.*
       - name: Upload Docker image as build artifact
         uses: ishworkh/docker-image-artifact-upload@v1
         with:
