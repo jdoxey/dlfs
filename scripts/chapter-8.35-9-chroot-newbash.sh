@@ -518,23 +518,7 @@ cd ..
 rm -rf groff-1.22.4
 
 
-log "8.59. GRUB-2.06"
-
-tar -xf grub-2.06.tar.xz
-cd grub-2.06
-
-./configure --prefix=/usr          \
-            --sysconfdir=/etc      \
-            --disable-efiemu       \
-            --disable-werror
-
-make
-
-make install
-mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
-
-cd ..
-rm -rf grub-2.06
+log "(8.59. GRUB-2.06 will be installed with UEFI support later"
 
 
 log "8.60. Gzip-1.10"
@@ -960,3 +944,93 @@ find /usr/lib /usr/libexec -name \*.la -delete
 find /usr -depth -name $(uname -m)-lfs-linux-gnu\* | xargs rm -rf
 
 userdel -r tester
+
+
+log "After chapter 8, BLFS: efivar-37 (required for efibootmgr)"
+
+wget --directory-prefix=/sources https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2
+wget --directory-prefix=/sources https://www.linuxfromscratch.org/patches/blfs/11.0/efivar-37-gcc_9-1.patch
+
+cd /sources
+
+tar -xf efivar-37.tar.bz2
+
+cd efivar-37
+
+patch -Np1 -i ../efivar-37-gcc_9-1.patch
+
+make CFLAGS="-O2 -Wno-stringop-truncation"
+
+make install LIBDIR=/usr/lib
+
+cd ..
+
+rm -rf efivar-37
+
+
+log "After chapter 8, BLFS: Popt-1.18 (required for efibootmgr)"
+
+wget --directory-prefix=/sources http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.18.tar.gz
+
+cd /sources
+
+tar -xf popt-1.18.tar.gz
+
+cd popt-1.18
+
+./configure --prefix=/usr --disable-static &&
+make
+
+make check
+
+make install
+
+cd ..
+
+rm -rf popt-1.18
+
+
+log "After chapter 8, BLFS: efibootmgr-17 (required for GRUB-EFI)"
+
+wget --directory-prefix=/sources https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
+
+cd /sources
+
+tar -xf efibootmgr-17.tar.gz
+
+cd efibootmgr-17
+
+sed -e '/extern int efi_set_verbose/d' -i src/efibootmgr.c
+
+make EFIDIR=LFS EFI_LOADER=grubx64.efi
+
+make install EFIDIR=LFS
+
+cd ..
+
+rm -rf efibootmgr-17
+
+
+
+log "After chapter 8, BLFS: GRUB-2.06 for EFI"
+
+cd /sources
+
+tar -xf grub-2.06.tar.xz
+cd grub-2.06
+
+unset {C,CPP,CXX,LD}FLAGS
+
+./configure --prefix=/usr        \
+            --sysconfdir=/etc    \
+            --disable-efiemu     \
+            --enable-grub-mkfont \
+            --with-platform=efi  \
+            --disable-werror     &&
+make
+
+make install &&
+mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
+
+cd ..
+rm -rf grub-2.06
