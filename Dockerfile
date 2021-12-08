@@ -28,6 +28,12 @@ RUN wget --input-file=$LFS/sources/wget-list --no-verbose --directory-prefix=$LF
 COPY scripts/md5sums $LFS/sources/
 RUN cd $LFS/sources; md5sum -c md5sums
 
+# *** Extra packages and patches used for BLFS components
+COPY scripts/wget-list-extras $LFS/sources/wget-list-extras
+RUN wget --input-file=$LFS/sources/wget-list-extras --no-verbose --directory-prefix=$LFS/sources
+COPY scripts/md5sums-extras $LFS/sources/
+RUN cd $LFS/sources; md5sum -c md5sums-extras
+
 # *** 4.2. Creating a limited directory layout in LFS filesystem ***
 RUN mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
 RUN for i in bin lib sbin; do ln -sv usr/$i $LFS/$i; done

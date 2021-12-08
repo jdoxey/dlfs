@@ -2,8 +2,10 @@
 
 log() {
 	echo ""
-	echo "***** $1 *****"
+	echo "*** $1 ***"
 }
+
+cd /sources
 
 
 log "8.35. Libtool-2.4.6"
@@ -948,9 +950,6 @@ userdel -r tester
 
 log "After chapter 8, BLFS: efivar-37 (required for efibootmgr)"
 
-wget --directory-prefix=/sources https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2
-wget --directory-prefix=/sources https://www.linuxfromscratch.org/patches/blfs/11.0/efivar-37-gcc_9-1.patch
-
 cd /sources
 
 tar -xf efivar-37.tar.bz2
@@ -969,8 +968,6 @@ rm -rf efivar-37
 
 
 log "After chapter 8, BLFS: Popt-1.18 (required for efibootmgr)"
-
-wget --directory-prefix=/sources http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.18.tar.gz
 
 cd /sources
 
@@ -991,8 +988,6 @@ rm -rf popt-1.18
 
 
 log "After chapter 8, BLFS: efibootmgr-17 (required for GRUB-EFI)"
-
-wget --directory-prefix=/sources https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz
 
 cd /sources
 
