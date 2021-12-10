@@ -62,5 +62,5 @@ RUN /bin/bash -l /home/lfs/chapter-5-6.sh
 USER root
 RUN chown -R root:root $LFS/{usr,lib,var,etc,bin,sbin,tools,lib64}
 
-# Copy scripts used for in chapter 7
+# Copy scripts used for in chapter 7 onwards
 COPY scripts/chapter-*.sh $LFS/root/
