@@ -15,4 +15,5 @@ done
 cp ../mbp-16.1-linux-wifi-5.13.12-1/config .config
 make olddefconfig
 
-make kernelrelease
+make all
+make htmldocs
