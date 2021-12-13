@@ -305,7 +305,7 @@ log "8.49. OpenSSL-1.1.1l"
 tar -xf openssl-1.1.1l.tar.gz
 cd openssl-1.1.1l
 
-./configure --prefix=/usr      \
+./config --prefix=/usr           \
          --openssldir=/etc/ssl \
          --libdir=lib          \
          shared                \
