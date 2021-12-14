@@ -23,5 +23,7 @@ make olddefconfig
 # TODO: find out the benefit of DEBUG_INFO_BTF and install pahole/dwarves if it looks necessary
 sed -i 's/CONFIG_DEBUG_INFO_BTF=y/# CONFIG_DEBUG_INFO_BTF is not set/' .config
 
+rm -rf /sources/*tar*
+
 make all
-make htmldocs
+#make htmldocs
