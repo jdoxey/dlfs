@@ -1029,3 +1029,33 @@ mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
 
 cd ..
 rm -rf grub-2.06
+
+
+log "After chapter 8, BLFS: cpio-2.13 (required for kernel build)"
+
+cd /sources
+
+tar -xf cpio-2.13.tar.bz2
+cd cpio-2.13
+
+sed -i '/The name/,+2 d' src/global.c
+
+./configure --prefix=/usr \
+            --enable-mt   \
+            --with-rmt=/usr/libexec/rmt &&
+make &&
+makeinfo --html            -o doc/html      doc/cpio.texi &&
+makeinfo --html --no-split -o doc/cpio.html doc/cpio.texi &&
+makeinfo --plaintext       -o doc/cpio.txt  doc/cpio.texi
+
+make check
+
+make install &&
+install -v -m755 -d /usr/share/doc/cpio-2.13/html &&
+install -v -m644    doc/html/* \
+                    /usr/share/doc/cpio-2.13/html &&
+install -v -m644    doc/cpio.{html,txt} \
+                    /usr/share/doc/cpio-2.13
+
+cd ..
+rm -rf cpio-2.13
