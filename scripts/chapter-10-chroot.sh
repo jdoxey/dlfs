@@ -23,7 +23,10 @@ make olddefconfig
 # TODO: find out the benefit of DEBUG_INFO_BTF and install pahole/dwarves if it looks necessary
 sed -i 's/CONFIG_DEBUG_INFO_BTF=y/# CONFIG_DEBUG_INFO_BTF is not set/' .config
 
-rm -rf /sources/*tar*
+rm -rvf /sources/*tar*
+
+echo "Space in container,"
+df -h
 
 make all
 #make htmldocs

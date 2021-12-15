@@ -78,10 +78,10 @@ jobs:
         uses: ishworkh/docker-image-artifact-download@v1
         with:
           image: "dlfs-1-host:latest"
+      - name: Clean up /tmp to clear more space
+        run: sudo rm -rf /tmp/* /tmp/.[a-zA-Z]*
       - name: Compile kernel
         run: ./build-4-chroot.sh
-      - name: Clean up /tmp before upload
-        run: sudo rm -rf /tmp/* /tmp/.[a-zA-Z]*
       - name: Upload Docker image as build artifact
         uses: ishworkh/docker-image-artifact-upload@v1
         with:
