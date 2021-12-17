@@ -80,8 +80,6 @@ jobs:
           image: "dlfs-1-host:latest"
       - name: Clean up /tmp to clear more space
         run: sudo rm -rf /tmp/* /tmp/.[a-zA-Z]*
-      - name: Prune docker to clear more space
-        run: sudo docker system prune --all --force
       - name: Compile kernel
         run: ./build-4-chroot.sh
       - name: Upload Docker image as build artifact
