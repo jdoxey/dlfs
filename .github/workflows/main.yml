@@ -74,6 +74,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Remove Android and .NET to increase space on VM
         run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet
+      - name: Prune docker caches to clear more space
+        run: sudo docker system prune --all --force
       - name: Download Docker image build artifact
         uses: ishworkh/docker-image-artifact-download@v1
         with:
