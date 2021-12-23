@@ -12,6 +12,18 @@ df -h
 echo "Docker disk usage after;"
 sudo docker system df
 echo "Disk usage;"
-sudo du -h -d 2 --exclude="boot" --exclude="dev" --exclude="proc" --exclude="run" --exclude="sys" /
+sudo du -h -d 2 --exclude="boot" --exclude="dev" --exclude="proc" --exclude="run" --exclude="sys" --exclude="data" --exclude="etc" /
+echo "Disk usage detail (/opt/hostedtoolcache);"
+sudo du -h -d 2 /opt/hostedtoolcache
+echo "Disk usage detail (/home/runner);"
+sudo du -h -d 2 /home/runner
+echo "Disk usage detail (/usr/local);"
+sudo du -h -d 2 /usr/local
+echo "Disk usage detail (/usr/lib);"
+sudo du -h -d 2 /usr/lib
+echo "Disk usage detail (/var/lib);"
+sudo du -h -d 2 /var/lib
+echo "Disk usage detail (/mnt);"
+sudo du -h -d 2 /mnt
 
 sudo docker commit $CONTAINER_ID dlfs-1-host
