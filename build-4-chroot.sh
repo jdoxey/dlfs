@@ -19,11 +19,7 @@ echo "Disk usage detail (/home/runner);"
 sudo du -h -d 2 /home/runner
 echo "Disk usage detail (/usr/local);"
 sudo du -h -d 2 /usr/local
-echo "Disk usage detail (/usr/lib);"
-sudo du -h -d 2 /usr/lib
 echo "Disk usage detail (/var/lib);"
 sudo du -h -d 2 /var/lib
-echo "Disk usage detail (/mnt);"
-sudo du -h -d 2 /mnt
 
 sudo docker commit $CONTAINER_ID dlfs-1-host

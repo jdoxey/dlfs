@@ -72,10 +72,12 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
-      - name: Remove Android and .NET to increase space on VM
-        run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet
+      - name: Clear space by removing Android, .NET and Haskell
+        run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet /usr/local/.ghcup
       - name: Prune docker caches to clear more space
         run: sudo docker system prune --all --force
+      - name: Prune docker `builder`
+        run: sudo docker builder prune
       - name: Download Docker image build artifact
         uses: ishworkh/docker-image-artifact-download@v1
         with:
