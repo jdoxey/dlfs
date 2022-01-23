@@ -75,7 +75,7 @@ jobs:
       - name: Clear space by removing Android, .NET, Haskell and hostedtoolcache
         run: sudo rm -rf /usr/local/lib/android /usr/share/dotnet /usr/local/.ghcup /opt/hostedtoolcache
       - name: Clear about 3G more space
-        run: sudo rm -rf /usr/local/share/chromium /usr/local/graalvm /usr/local/lib/node_modules /usr/local/julia1.7.0
+        run: sudo rm -rf /usr/local/share/chromium /usr/local/graalvm /usr/local/lib/node_modules /usr/local/julia1.7.0 /home/linuxbrew /usr/local/share/powershell /usr/local/lib/heroku /usr/local/aws-sam-cli 
       - name: Prune docker caches to clear more space
         run: sudo docker system prune --all --force
       - name: Prune docker `builder`
