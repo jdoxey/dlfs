@@ -79,7 +79,7 @@ jobs:
       - name: Prune docker caches to clear more space
         run: sudo docker system prune --all --force
       - name: Prune docker `builder`
-        run: sudo docker builder prune
+        run: sudo docker builder prune --force
       - name: Download Docker image build artifact
         uses: ishworkh/docker-image-artifact-download@v1
         with:
