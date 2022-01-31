@@ -1,4 +1,4 @@
-FROM debian:11.1
+FROM debian:stable-slim
 
 # Update and install build tools
 RUN apt-get -y update
